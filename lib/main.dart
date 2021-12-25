@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './transaction.dart';
+import 'package:intl/intl.dart';
 
 void main() => runApp(const MyApp());
 
@@ -28,6 +29,8 @@ class MyHomePage extends StatelessWidget {
 
   MyHomePage({Key? key}) : super(key: key);
 
+  late String titleInput;
+  late String amountInput;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,16 +38,45 @@ class MyHomePage extends StatelessWidget {
         title: const Text('Welcome!'),
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Card(
-            color: Colors.green,
+            color: Colors.purple,
             child: Container(
               width: double.infinity,
               child: const Text('CHART!'),
             ),
             elevation: 5,
+          ),
+          Card(
+            elevation: 5,
+            child: Container(
+              padding: EdgeInsets.all(10),
+              child: Column(
+                children: <Widget>[
+                  TextField(
+                    decoration: InputDecoration(labelText: 'Title'),
+                    onChanged: (value) {
+                      titleInput = value;
+                    }, //fires up on every keystroke
+                  ),
+                  TextField(
+                      decoration: InputDecoration(labelText: 'Amount'),
+                      onChanged: (value) {
+                        amountInput = value;
+                      }),
+                  OutlinedButton(
+                    onPressed: () {
+                      print(titleInput);
+                      print(amountInput);
+                    },
+                    child: const Text('Add Transaction'),
+                    style: OutlinedButton.styleFrom(primary: Colors.purple),
+                  ),
+                ],
+              ),
+            ),
           ),
           Column(
             children: transactions.map((tx) {
@@ -59,7 +91,7 @@ class MyHomePage extends StatelessWidget {
                       ),
                       padding: const EdgeInsets.all(10),
                       child: Text(
-                        tx.amount.toString(),
+                        '\$' + tx.amount.toString(),
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
@@ -79,7 +111,8 @@ class MyHomePage extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          tx.date.toString(),
+                          DateFormat('yyyy-MM-dd')
+                              .format(tx.date), //using intl package ki class.
                           style: const TextStyle(
                             color: Colors.grey,
                           ),
